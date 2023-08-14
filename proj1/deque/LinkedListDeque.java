@@ -1,220 +1,242 @@
 package deque;
+import java.util.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
 
-public class LinkedListDeque<T> implements Iterable<T>,Deque<T>{
-
-    public StuffNode sentinel;
-    private int size;
+/** nodes which will be building blocks of the linked list dequeue */
     private class StuffNode{
-        public T item;
-        public StuffNode prev;
-        public StuffNode next;
+        /** instance attributes which define our node */
+        private T item;
+        private StuffNode prev;
+        private StuffNode next;
 
+    /** constructor of the node */
+    public StuffNode (StuffNode prev, T item, StuffNode next){
+        this.prev = prev;
+        this.item = item;
+        this.next = next;
+    }
 
-
-        public StuffNode(StuffNode p, T i, StuffNode n) {
-            prev = p;
-            item = i;
-            next = n;
-        }
 
     }
 
-    /**  for adding a number in one node list */
+
+    /** instance attributes of our LinkedListDequeue */
+    StuffNode sentinel;
+    int size;
+    /** instantiating an empty list */
+    public LinkedListDeque(){
+
+        size = 0;
+        /** size is zero, no elements, and we want both prev and next
+         * to be pointing back to the sentinel pointer which is a stuff node;
+         */
+        /** here you make our sentinel  actually point to a stuff node, but the trick is
+         * never to put anything into this stuffnode, it will just be there to keep everything in order
+         */
+        sentinel = new StuffNode(null,null,null);
+        sentinel.next=sentinel;
+        sentinel.prev=sentinel;
+
+    }
+
+    /**now we make a new constructor when we immediately want to put an item in the next stuff node*/
     public LinkedListDeque(T x){
-        size+=1;
-
-
-
-        sentinel = new StuffNode(null,x,null);
-        sentinel.next=new StuffNode(sentinel,x,sentinel);
+        size += 1;
+        sentinel = new StuffNode(null,null,null);
+        sentinel.next=new StuffNode(sentinel, x, sentinel);
         sentinel.prev=sentinel.next;
 
-    }
-
-    /**  for empty list */
-    public LinkedListDeque(){
-        size=0;
-        sentinel = new StuffNode(null,null,null);
-        sentinel.prev=sentinel;
-        sentinel.next=sentinel;
 
     }
 
 
     @Override
-    public int size(){
+    public void addFirst(T item) {
+        size += 1;
+        /** we add a new element whose prev will be pointing towards sentinel
+         * and its next will be pointing towards whatever the sentinel.next was pointing
+         * to before.
+         */
+        sentinel.next=new StuffNode(sentinel, item, sentinel.next);
+        /** this is to make the prev part of the node that used to be after sentinel point
+         * towards the newly added node!
+         */
+        sentinel.next.next.prev=sentinel.next;
+
+    }
+
+    @Override
+    public void addLast(T item) {
+        size +=1;
+        /** this adds another node at the end of the list */
+        sentinel.prev=new StuffNode(sentinel.prev,item,sentinel);
+        /** this makes the node that used to be in the end now point towards the new end*/
+        sentinel.prev.prev.next=sentinel.prev;
+
+    }
+
+    @Override
+    public int size() {
         return size;
     }
 
-//    public T removeFirst(): Removes and returns the item at the front of the deque. If no such item exists, returns null.
-@Override
-    public T removeFirst(){
-        if (sentinel.next==sentinel){
+    @Override
+    public void printDeque() {
+        /**pointer to keep track of first item after sentinel*/
+        StuffNode P = sentinel.next;
+        /** loop over all the nodes and print items until make full circle */
+        while (sentinel.next!=sentinel){
+            System.out.print(sentinel.next.item+" ");
+            sentinel.next=sentinel.next.next;
+        }
+        System.out.println("");
+        /** finally return the pointer of the sentinel to the first node after it */
+        sentinel.next=P;
+
+    }
+
+    @Override
+    /**Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    public T removeFirst() {
+        /** to hold the return value */
+        StuffNode returner;
+        /** if nothing in the list, return null */
+        if (size<1){
             return null;
         }
-        size-=1;
-        T f = sentinel.next.item;
+        returner = sentinel.next;
+        /** go over the first item, make the pointers cross it from both sides */
         sentinel.next=sentinel.next.next;
         sentinel.next.prev=sentinel;
-        return f;
-
-    }
-//    public T removeLast(): Removes and returns the item at the back of the deque. If no such item exists, returns null.
-@Override
-    public T removeLast(){
-
-        if (sentinel.prev == sentinel){
-            return null;
-        }
         size-=1;
-        T l = sentinel.prev.item;
-        sentinel.prev=sentinel.prev.prev;
-        sentinel.prev.prev.next=sentinel;
-        return l;
+        return returner.item;
+
 
     }
-//    public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!
-@Override
-    public T get(int index){
-//        size-=1;
-        LinkedListDeque l = this;
-        if (l.isEmpty()){
+
+    @Override
+    /** Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    public T removeLast() {
+        /** to hold the return value */
+        StuffNode returner;
+        if (size<1){
             return null;
         }
-        StuffNode to_return;
-        StuffNode save_the_first;
-        save_the_first=l.sentinel.next;
+        returner = sentinel.prev;
+        sentinel.prev=sentinel.prev.prev;
+        sentinel.prev.next=sentinel;
+        size-=1;
+        return returner.item;
+    }
+
+    @Override
+    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque! */
+    public T get(int index) {
+        StuffNode pointer=sentinel.next;
         int counter = 0;
-        while (counter != index){
-            counter+=1;
-            l.sentinel.next=l.sentinel.next.next;
+        while(counter<index){
+            pointer=pointer.next;
+            counter++;
         }
-        to_return=l.sentinel.next;
-        l.sentinel.next=save_the_first;
-//        to_return.prev.next=to_return.next;
-//        to_return.next.prev=to_return.prev;
-        return to_return.item;
+        return pointer.item;
     }
 
-//    public T getRecursive(int index){
-//        int new_size=size;
-//    }
-
-//    @Override
-//    public boolean isEmpty() {
-//        if (sentinel.prev != sentinel) {
-//            return false;
-//        }
-//        return true;
-//    }
     @Override
-    public void addFirst(T x){
-//        sum_size+=1;
-        size+=1;
-//        if (size > 1) {
-//            sentinel.next=new StuffNode(sentinel,x,sentinel.next);
-//        }
-//        sentinel.next.prev=
-        sentinel.next=new StuffNode(sentinel,x,sentinel.next);
-        sentinel.next.next.prev=sentinel.next;
+    public boolean isEmpty() {
+        return size==0;
     }
-    @Override
-    public void addLast(T x){
-        size+=1;
 
-        sentinel.prev=new StuffNode(sentinel.prev,x,sentinel);
-        sentinel.prev.prev.next=sentinel.prev;
-
-        if (sentinel.prev.prev == sentinel) {
-            sentinel.next=sentinel.prev;
+    public T getRecursive(int index){
+        if (index == 0){
+            return sentinel.next.item;
         }
-
-
+        sentinel=sentinel.next;
+        return getRecursive(index-1);
     }
+
     @Override
-    public void printDeque(){
-        LinkedListDeque l = this;
-        StuffNode save_first_node = l.sentinel.next;
-
-
-        while (l.sentinel.next != l.sentinel){
-            System.out.print(l.sentinel.next.item+" ");
-            l.sentinel.next=l.sentinel.next.next;
-        }
-        l.sentinel.next=save_first_node;
-        System.out.println();
-
+    public Iterator<T> iterator(){
+        return new LLIterator();
     }
+    private class LLIterator implements Iterator<T> {
+        StuffNode pointer=sentinel.next;
 
-
-    /** returns an iterator (a.k.a. seer) into ME */
-    @Override
-    public Iterator<T> iterator() {
-
-        return new LinkedListDequeueIterator();
-    }
-
-    private class LinkedListDequeueIterator implements Iterator<T> {
-        private int wizPos;
-        public LinkedListDequeueIterator() {
-
-            wizPos = 0;
-        }
         @Override
         public boolean hasNext() {
-
-            return wizPos < size;
+            return pointer.prev!=sentinel.prev;
         }
+
         @Override
         public T next() {
-            T returnItem = get(wizPos);
-            wizPos += 1;
-            return returnItem;
-        }
-    }
-
-    public boolean contains(T x) {
-        for (int i = 0; i < size; i += 1) {
-            for (T a : this) {
-                if (a.equals(x)){
-                    return true;
-                }
+            if  (!hasNext()){
+                throw new NoSuchElementException();
             }
+            /** split next into three parts!*/
+            /** part 1, get the current item */
+            T curr = pointer.item;
+            /** part 2, advance the iterator */
+            pointer=pointer.next;
+            /** part 3 return the item */
+            return curr;
 
         }
-        return false;
     }
+    /** Returns whether or not the parameter o is equal to the Deque.
+     *  o is considered equal if it is a Deque and if it contains the same contents
+     *  (as goverened by the generic T’s equals method) in the same order.*/
 
-//    public boolean equals(Object other) {
-//
-//        if (other instanceof LinkedListDeque o){
-//            if (o.size()!=this.size()){
-//                return false;
-//            }
-//            for (T item : this){
-//                if (!o.contains(item)){
-//                    return false;
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    public boolean equals(Object o){
+        StuffNode fP = sentinel.next;
+
+        StuffNode sP;
+        /** if not Linked list return false */
+        if (!(o instanceof LinkedListDeque)){
+            return false;
+        }
+        else {
+            LinkedListDeque O = ((LinkedListDeque) o);
+            /** if not the same size, return false */
+            if (size!=O.size()){
+                return false;
+            }
+            sP=O.sentinel.next;
+
+            while(fP.next.item!=null || sP.next.item!=null){
+                if (fP.item!=sP.item){
+                    return false;
+                }
+                fP=fP.next;
+                sP=sP.next;
+
+            }
+        }
+        return true;
+
+    }
 
     public static void main(String[] args) {
+        LinkedListDeque<Integer> B = new LinkedListDeque<Integer>(2);
+        LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(2);
+        L.addFirst(4);
+        B.addFirst(4);
+        L.addLast(99);
+        B.addLast(99);
+        L.addFirst(10);
+        B.addFirst(102);
+//        Integer item = L.removeLast();
+//        int getter = L.get(1);
+//        L.printDeque();
+//        for (Integer o: L){
+//            System.out.println(o);
+//        }
+        L.printDeque();
+        System.out.println(L.get(8));
+        System.out.println(L.getRecursive(8));
 
-        LinkedListDequeueIterator<Integer> q = new LinkedListDequeueIterator(three_item_list);
 
-        LinkedListDeque<Integer> three_item_list = new LinkedListDeque<Integer>();
-        three_item_list.addFirst(12);
-        three_item_list.addFirst(99);
-        three_item_list.addLast(3);
-        three_item_list.printDeque();
-        for (int i : three_item_list) {
-            System.out.println(i);
-        }
-//        three_item_list.printDeque();
+
     }
+
+
 }
