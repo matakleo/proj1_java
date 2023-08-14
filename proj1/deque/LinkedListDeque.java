@@ -187,31 +187,25 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
      *  (as goverened by the generic T’s equals method) in the same order.*/
 
     public boolean equals(Object o){
-        StuffNode fP = sentinel.next;
 
-        StuffNode sP;
         /** if not Linked list return false */
-        if (!(o instanceof LinkedListDeque)){
+        if (!(o instanceof Deque)){
             return false;
         }
         else {
-            LinkedListDeque O = ((LinkedListDeque) o);
+            Deque O = ((Deque) o);
             /** if not the same size, return false */
             if (size!=O.size()){
                 return false;
             }
-            sP=O.sentinel.next;
-
-            while(fP.next.item!=null || sP.next.item!=null){
-                if (fP.item!=sP.item){
+            for (int i=0; i<O.size();i++){
+                if (!(O.get(i).equals(get(i)))){
                     return false;
                 }
-                fP=fP.next;
-                sP=sP.next;
-
             }
+            return true;
         }
-        return true;
+
 
     }
 

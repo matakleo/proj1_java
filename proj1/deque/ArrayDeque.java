@@ -94,6 +94,9 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     @Override
     public T removeFirst() {
+        if (size<1){
+            return null;
+        }
         T item;
         if (nextFirst == items.length-1) {
             item = items[0];
@@ -113,6 +116,9 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     @Override
     public T removeLast() {
+        if (size<1){
+            return null;
+        }
         T item;
         if (nextLast==0) {
             item = items[items.length - 1];
@@ -184,7 +190,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     @Override
     public boolean isEmpty() {
-        return size>0;
+        return size==0;
     }
 
 
@@ -213,16 +219,16 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayDeque)){
+        if (!(o instanceof Deque)){
             return false;
         }
         else {
-            ArrayDeque A = (ArrayDeque) o;
+            Deque A = (Deque) o;
             if (size!=A.size()){
                 return false;
             }
             for (int i=0; i<A.size();i++){
-                if (A.get(i)!=get(i)){
+                if (!(A.get(i).equals(get(i)))){
                     return false;
                 }
             }
@@ -233,26 +239,20 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     public static void main(String[] args) {
         ArrayDeque<Integer> L = new ArrayDeque<>();
         ArrayDeque<Integer> A = new ArrayDeque<>();
-        L.addFirst(2);
-        A.addFirst(2);
-        L.addLast(4);
-        A.addLast(4);
-        L.addLast(6);
-        A.addLast(6);
-        L.addLast(8);
-        A.addLast(8);
-//        L.addLast(10);
-        A.addLast(10);
-//        L.addLast(12);
-//        L.addLast(14);
-//        L.addLast(18);
-//        A.removeFirst();
+L.addLast(0);
+        L.addLast(0);
+        L.addLast(0);
+        L.addLast(0);
+        L.addLast(0);
+        L.addLast(0);
+        L.addLast(0);
+
 
         for (Integer o: L){
             System.out.println(o);
         }
 
-        System.out.print(L.equals(A));
+        System.out.print(L.isEmpty());
 
 
     }
