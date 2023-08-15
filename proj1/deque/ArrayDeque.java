@@ -261,58 +261,5 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     }
 
     public static void main(String[] args) {
-        ArrayDeque<Integer> L = new ArrayDeque<>();
-        LinkedListDeque<Integer> B = new LinkedListDeque<>();
-//        ArrayDeque<Integer> A = new ArrayDeque<>();
-//        for (int i = 0; i < 25; i++) {
-//            int operationNumber = StdRandom.uniform(0, 2);
-//            if (operationNumber == 0) {
-//                L.addLast(i);
-//                B.addLast(i);
-//            } else {
-//                L.addFirst(i);
-//                B.addFirst(i);
-//            }
-//            if (!L.equals(B)) {
-//                System.out.println("not equal");
-//                L.printDeque();
-//                B.printDeque();
-//
-//            }
-//        }
-//        for (int i = 0; i < 250; i++) {
-//            int operationNumber = StdRandom.uniform(0, 2);
-//            if (operationNumber == 0) {
-//                L.removeLast();
-//                B.removeLast();
-//            } else {
-//                L.removeFirst();
-//                B.removeFirst();
-//            }
-//            if (!L.equals(B)) {
-//                System.out.println("not equal");
-//                L.printDeque();
-//                B.printDeque();
-//
-//            }
-
-
-
-
-
-//        System.out.println(B);
-//        System.out.print("[");
-//        for (Integer o : L) {
-//            System.out.print(o + ", ");
-//        }
-//
-//        System.out.print("]");
-
-        L.addFirst(0);
-        L.addFirst(1);
-        L.removeFirst();
-        L.removeFirst();
-        L.isEmpty();
-        L.addFirst(5);
     }
 }
