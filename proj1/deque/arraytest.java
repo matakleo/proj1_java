@@ -101,9 +101,9 @@ public class arraytest {
 
             int operationNumber = StdRandom.uniform(0, 4);
             if (operationNumber == 0) {
-                if (B.size()==8){
-                    continue;
-                }
+//                if (B.size()==8){
+//                    continue;
+//                }
                 // addLast
                 int randVal = StdRandom.uniform(0, 100);
                 L.add(randVal);
@@ -137,9 +137,9 @@ public class arraytest {
 
                 }
                 else if (operationNumber == 5) {
-                    if (B.size()==8){
-                        continue;
-                    }
+//                    if (B.size()==8){
+//                        continue;
+//                    }
                     // addLast
                     int randVal = StdRandom.uniform(0, 100);
                     L.add(0,randVal);

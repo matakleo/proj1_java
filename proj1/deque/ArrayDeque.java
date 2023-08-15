@@ -1,4 +1,6 @@
 package deque;
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Random;
 import java.util.*;
 public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
@@ -15,6 +17,18 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         nextLast = 5;
 
 
+    }
+    /** Resizes the underlying array to the target capacity. */
+    private void resize() {
+        int i = 0;
+        T[] a = (T[]) new Object[size*2];
+        for (T o : this){
+            a[size/2+i] = o;
+            i++;
+        }
+        items = a;
+        nextFirst=size/2-1;
+        nextLast=nextFirst+size+1;
     }
     private void moveFirstLeft(){
         nextFirst-=1;
@@ -34,6 +48,9 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     }
     @Override
     public void addFirst(T item) {
+        if (size==items.length){
+            resize();
+        }
         size+=1;
         items[nextFirst]=item;
         moveFirstLeft();
@@ -54,6 +71,9 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     }
     @Override
     public void addLast(T item) {
+        if (size==items.length){
+            resize();
+        }
         size+=1;
         items[nextLast]=item;
         moveLastRight();
@@ -138,49 +158,29 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     @Override
     public T get(int index) {
-        T[] p = (T[]) new Object[items.length];
+
+
         int i,j;
         /** first border case */
 
-        if (nextFirst==7){
-            i=0;
-            while (i< items.length){
-                p[i]=items[i];
-                i++;
+        if (nextFirst+1==items.length){
+                return items[index];
             }
+        if (nextFirst > size/2 -1 ){
+            if (index+nextFirst>=items.length-1){
+                int pero = items.length-index;
+                return items[nextFirst-pero+1];
+            }
+
         }
+        if (nextFirst+index+1>= items.length){
+            return items[1+nextFirst+index- items.length];
+        }
+        return items[nextFirst+index+1];
 
-//        /** if next first is in proper line */
-//
-//        else if (nextFirst<4) {
-//            i = nextFirst + 1;
-//            while (i < items.length ) {
-//                p[i - nextFirst -1] = items[i];
-//                i++;
-//            }
-//            i=0;
-//            while (i < nextFirst + 1) {
-//                p[items.length - nextFirst -1+i] = items[i];
-//                i++;
-//            }
-//
-//        }
+
         /** final catch */
-        else {
-            i = nextFirst + 1;
-            while (i < items.length) {
-                p[i - nextFirst -1] = items[i];
-                i++;
-            }
-            i=0;
-            while (i < nextFirst + 1) {
-                p[items.length - nextFirst -1+i] = items[i];
-                i++;
-            }
 
-
-            }
-    return p[index];
         }
 
     public Iterator<T> iterator(){
@@ -199,7 +199,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         int index = 0;
         @Override
         public boolean hasNext() {
-            return index<items.length && get(index)!=null;
+            return index<items.length;
         }
 
         @Override
@@ -238,21 +238,45 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     public static void main(String[] args) {
         ArrayDeque<Integer> L = new ArrayDeque<>();
-        ArrayDeque<Integer> A = new ArrayDeque<>();
-L.addLast(0);
-        L.addLast(0);
-        L.addLast(0);
-        L.addLast(0);
-        L.addLast(0);
-        L.addLast(0);
-        L.addLast(0);
+        List<Integer> B = new ArrayList<Integer>();
+//        ArrayDeque<Integer> A = new ArrayDeque<>();
+        for (int i = 0; i<25; i++){
+            int operationNumber = StdRandom.uniform(0, 2);
+            if (operationNumber==0){
+                L.addLast(i);
+                B.add(i);
+            }
+            else {
+                L.addFirst(i);
+                B.add(0,i);
+            }
+            System.out.println(L.equals(B));
+//            System.out.println(i+", "+B);
+//            System.out.print("[");
+//            for (Object o: L){
+//                System.out.print(o+", ");
+//            }
+//            System.out.println("]");
 
 
-        for (Integer o: L){
-            System.out.println(o);
         }
 
-        System.out.print(L.isEmpty());
+//        for (int i = 0; i<8; i++){
+//            L.addLast(i);
+//            B.add(i);
+//        }
+//
+//        L.get(2);
+ System.out.println(B);
+        System.out.print("[");
+        for (Integer o: L){
+            System.out.print(o+", ");
+        }
+
+        System.out.print("]");
+
+//
+//        System.out.print(L.isEmpty());
 
 
     }
