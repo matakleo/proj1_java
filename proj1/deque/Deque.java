@@ -15,5 +15,5 @@ public interface Deque<T> {
 
     public T get(int index);
 
-     public boolean isEmpty();
+    public boolean isEmpty();
 }

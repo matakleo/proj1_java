@@ -1,7 +1,7 @@
 package deque;
 import java.util.*;
 
-public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
 /** nodes which will be building blocks of the linked list dequeue */
     private class StuffNode{
@@ -22,8 +22,8 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
 
 
     /** instance attributes of our LinkedListDequeue */
-    StuffNode sentinel;
-    int size;
+    private StuffNode sentinel;
+    private int size;
     /** instantiating an empty list */
     public LinkedListDeque(){
 
@@ -70,7 +70,7 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
     public void addLast(T item) {
         size +=1;
         /** this adds another node at the end of the list */
-        sentinel.prev=new StuffNode(sentinel.prev,item,sentinel);
+        sentinel.prev=new StuffNode(sentinel.prev, item, sentinel);
         /** this makes the node that used to be in the end now point towards the new end*/
         sentinel.prev.prev.next=sentinel.prev;
 
@@ -209,28 +209,7 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
 
     }
 
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> B = new LinkedListDeque<Integer>(2);
-        LinkedListDeque<Integer> L = new LinkedListDeque<Integer>(2);
-        L.addFirst(4);
-        B.addFirst(4);
-        L.addLast(99);
-        B.addLast(99);
-        L.addFirst(10);
-        B.addFirst(102);
-//        Integer item = L.removeLast();
-//        int getter = L.get(1);
-//        L.printDeque();
-//        for (Integer o: L){
-//            System.out.println(o);
-//        }
-        L.printDeque();
-        System.out.println(L.get(8));
-        System.out.println(L.getRecursive(8));
 
-
-
-    }
 
 
 }

@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Random;
 import java.util.*;
-public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
+public class ArrayDeque <T> implements Deque<T>, Iterable<T> {
 
     private T[] items;
     private int size;
@@ -260,6 +260,5 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         }
     }
 
-    public static void main(String[] args) {
-    }
+
 }

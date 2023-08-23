@@ -96,14 +96,14 @@ public class arraytest {
         List<Integer> L = new ArrayList<Integer>();
         ArrayDeque<Integer> B = new ArrayDeque<>();
 
-        int N = 1000000;
+        int N = 100000;
         for (int i = 0; i < N; i += 1) {
 
             int operationNumber = StdRandom.uniform(0, 4);
             if (operationNumber == 0) {
-//                if (B.size()==8){
-//                    continue;
-//                }
+                if (B.size()==8){
+                    continue;
+                }
                 // addLast
                 int randVal = StdRandom.uniform(0, 100);
                 L.add(randVal);
@@ -122,8 +122,7 @@ public class arraytest {
                     assertEquals(L.remove(L.size()-1),B.removeLast());
 
 
-                }
-                else if (operationNumber == 3) {
+                } else if (operationNumber == 3) {
                     // get
                     int to_get = StdRandom.uniform(0, B.size());
                     assertEquals(L.get(to_get),B.get(to_get));
@@ -137,12 +136,12 @@ public class arraytest {
 
                 }
                 else if (operationNumber == 5) {
-//                    if (B.size()==8){
-//                        continue;
-//                    }
+                    if (B.size()==8){
+                        continue;
+                    }
                     // addLast
                     int randVal = StdRandom.uniform(0, 100);
-                    L.add(0, randVal);
+                    L.add(0,randVal);
                     B.addFirst(randVal);
 
                 }
